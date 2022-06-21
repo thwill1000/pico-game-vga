@@ -1,0 +1,105 @@
+PicoGAME NES
+
+The PicoGAME (NES version) is simply a PCB which allows NES controllers or a PC joystick to be connected to a PicoMite VGA. The usual PicoMite VGA facilities are available:
+ 16-colour VGA display
+ PS/2 keyboard input
+ Stereo sound output
+
+
+The PCB has been arranged to have two DB9F sockets on the front, together with a Power On / Mode LED. Port A socket can accept a NES controller and can also be used for serial port networking. Additionally it has a single analogue input. Port B socket can accept either a NES controller or a PC-type switched or analogue joystick.Switching between these modes is done in software and the current mode is indicated by the LED: red for NES, green for PC mode.
+
+The Audio output has a link for each channel to allow it to be at either high or low level. Low level is suitable for line output to an external amplifier. High level should be used with headphones of 32R or greater impedance.
+
+
+The GPIO pins have been connected as follows:
+
+DB9F Port A
+Pin		NES mode	PC mode		Auxiliary mode
+1	No connection
+2	GP0	Data		-		COM1 TX
+3	GP1	Latch		-		COM1 RX
+4	GP2	Clock		-		Spare
+5	No connection
+6		3V3		3V3		3V3
+7		3V3		3V3		3V3	
+8		GND		GND		GND
+9	GP28	Spare		Paddle A	Spare
+
+DB9F Port B
+Pin		NES mode	PC mode		Auxiliary mode
+1	GP3	Spare		Up
+2	GP4	Data		Down
+3	GP5	Latch		Left
+4	GP22	Clock		Right
+5	GP26	Spare		Paddle B
+6		(3V3)		Trigger (GP14)
+7		3V3		3V3
+8		GND		GND
+9	GP27	Spare		Paddle A
+
+Port B is normally in NES mode. Pin 6 is switched into PC mode by raising GP15 high.
+The ADC pins GP26, GP27 & GP28 have 10k rsistors which can be selected as pull-up, pull-down or disconnected. All other pins have 10k pull-up resistors(GP1 has a higher value).
+GP0 also has a series resistor to protect against short circuits when used as COM1 TX.
+GP1 also has a series resistor and clamping diodes to protect against harmful voltages when used as COM1 RX.
+
+When the ADC inputs are used for Paddle inputs in PC mode (i.e. 100k variable resistor to 3V3) the jumpers must be set in the DN position. If they are to be used with potentiometers from 0-3V3 then they should be disconnected. If used as digital inputs the jumpers can be set in the UP position if required.
+
+
+
+
+			=====================  Bill Of Materials   =======================
+
+QTY	Description & Source
+
+1	PicoGAME PCB
+1	Hammond 1593WBK enclosure (optional) - Mouser 546-1593WBK, Digikey 164-1593WBK-ND, RS 228-7399
+0	U1 - Not normally fitted - Bitsbox M058 or equivalent
+1	U2 - MCP1700 3V3 250mA voltage regulator - Bitsbox QD314
+1	U3 - Raspberry Pi Pico with PicoMite VGA firmware and male pins on bottom
+1	U4 - 4-way level shifting module - ebay
+1	U5 - Micro SDcard module - ebay. Note, not the version with a regulator or level shifting
+
+1	K1 - 3.5mm/1.3mm barrel jack connector - Mouser 490-PJ-031D, ebay
+1	K2 - Upright USB-A PCB Socket Right Angle - Amphenol FCI 73725-0110BLF, RS 771-0048, Mouser 649-73725-0110BLF
+1	K3 - 15-pin 3-row DB15F 90 degree VGA connector
+	  RS 481-443, AMP 1-1734530-1, MULTICOMP SPC15430, Element14 1557991
+1	K4 - PS/2 female socket - ebay - HA1607
+1	K5 - 3.5mm jack socket - Pro Signal PSG03613 - ebay, CPC Farnell AV21208
+2	K6, K7 - 9-pin DB9M 90 degree connector - TE Connectivity Amplimite 5747840-6, RS 446-5209
+
+1	D1 - SB140. You can usually get away with a 1N4001 here. It will drop about 0.75V at 100mA.
+	  Only the keyboard will be affected by the lower voltage.
+2	D2, D3, D7, D8 - 1N4148 or 1N914
+2	D4, D5 - BAT85 or similar small signal Schottky diode - Bitsbox QD113
+1	D6 - Red/Green 3-wire common cathode 3mm LED. Note - this fits into a 3.5mm gap between the controller ports..
+
+1	Q1 - BC327 or similar small signal PNP transistor - Bitsbox QD005
+
+0	C1 - Not normally fitted
+1	C2 - 220uF 10v 2.5mm pitch aluminium can electrolytic - Bitsbox HC220U10
+1	C4 - 22uF 10v tantalum electrolytic - Bitsbox CT22U10A
+2	C5, C6 - 47nF 100v polyester film - Bitsbox PY47N
+6	C3, C7, C8, C9, C10, C11 - 100nF multilayer ceramic - Bitsbox CC004 (It's worth getting 10 just in case :) )
+
+	All resistors can be 0.25W 5% carbon film. Metal film 0.25W 1% are preferable for the 220R value.
+3	R1, R4, R32 - 1k
+4	R2, R3, R5, R6 - 2k2
+2	R7, R8 - 3k3 (These set the max. volume for headphones. Do not reduce below 1k)
+1	R9 - 2R2
+10	R10, R11, R12, R14, R15, R16,R17, R18, R33, R30 - 220R
+1	R13 - 100R 6mm preset - Bitsbox V6R100R
+11	R19, R22, R23, R24, R25, R26, R27, R28, R29, R31, R34 - 10k
+1	R20 - 680R
+1	R21 - 27k
+1	R35, R36 - 68R
+1	R37 - 120R
+
+2	20-way female SIP connector for PicoMite
+
+1	LB1 - 3x2 and 3x1 male link headers (or 1 3x3)
+1	LB2 - 3x2 male link header
+5	0.1" jumper to fit above - Bitsbox CN059
+1	5-way female SIP connector for JS1 (optional)
+
+1	Right-angle 6mm tactile switch - Bitsbox SW059
+1	JS1 - Joystick module - ebay. Often found in Arduino sensor kits or advertised as a PS4 spare part. (Optional)
