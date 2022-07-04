@@ -9,6 +9,9 @@ Its main point of differentiation from the PicoMiteVGA reference design is that 
 
 *\* There are also analogue controller options but these require original retro or homebrew controllers, there are no new off-the-shelf compatible devices.*
 
+![PicoGAME VGA 1.4 Board](images/pico-game-vga-1-4.jpg)<br/>
+PicoGAME VGA 1.4 Board
+
 ## Who designed it ?
 
 The PicoGAME VGA was designed by Mick Ames (@Mixtel90) with encouragement from the cheap seats by Tom Williams (@thwill). It is based on the PicoMiteVGA reference design by Peter Mather (@matherp) and runs the standard PicoMiteVGA firmware by Geoff Graham (@GeoffG) and Peter Mather:
