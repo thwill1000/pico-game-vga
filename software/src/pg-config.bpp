@@ -1,0 +1,123 @@
+' Copyright (c) 2022 Thomas Hugo Williams
+' License MIT <https://opensource.org/licenses/MIT>
+' For PicoGAME VGA 1.4 running PicoMiteVGA MMBasic 5.07.05
+
+Option Base 0
+Option Default None
+Option Explicit On
+
+#Include "PicoGAME.inc"
+
+' Current controller settings.
+Dim controller$(1) Length 5 = ( "none", "none" )
+
+Mode 1
+main()
+End
+
+' TODO: Display output on serial console.
+
+Sub main()
+  Static WIDTH% = Mm.Hres \ Mm.Info(FontWidth)
+
+  ' Read current settings from .INI file if present.
+  Local settings$(10)
+  Local result% = read_inifile%(PG_INI_FILE$, settings$())
+  If result% < -1 Then Error "Failed to load '" + PG_INI_FILE$ + "': " + Str$(result%)
+  controller$(PORT_A%) = get_prop$(settings$(), "port-a", "none")
+  controller$(PORT_B%) = get_prop$(settings$(), "port-b", "none")
+
+  Cls
+  print_at(0, 0,  "PicoGAME VGA Controller Configuration")
+  print_at(0, 1,  "-------------------------------------")
+  print_at(0, 3,  "Select controller(s) using keys 1-8")
+  print_at(0, 4,  "Then 'play' with controller to test response")
+  print_at(0, 6,  "Port A:")
+  print_at(0, 12, "Port B:")
+  print_ctrl_options()
+  print_at(0, 18, "[S]   to save settings and exit")
+  print_at(0, 19, "[Esc] to exit without saving")
+
+  Call controller$(PORT_A%) + "_init", PORT_A%
+  Call controller$(PORT_B%) + "_init", PORT_B%
+
+  Local bits%, k$, do_save%
+  Do
+    bits% = Call(controller$(PORT_A%) + "_read%", PORT_A%)
+    print_at(8, 6, rpad$(ctrl_bits_to_string$(controller$(PORT_A%), bits%), WIDTH% - 8))
+    bits% = Call(controller$(PORT_B%) + "_read%", PORT_B%)
+    print_at(8, 12, rpad$(ctrl_bits_to_string$(controller$(PORT_B%), bits%), WIDTH% - 8))
+
+    k$ = LCase$(Inkey$)
+    Select Case k$
+      Case "1", "2", "3", "4"
+        controller$(PORT_A%) = CONTROLLER_IDS$(Val(k$) - 1)
+        print_ctrl_options()
+        Call controller$(PORT_A%) + "_init", PORT_A%
+      Case "5", "6", "7", "8"
+        controller$(PORT_B%) = CONTROLLER_IDS$(Val(k$) - 5)
+        print_ctrl_options()
+        Call controller$(PORT_B%) + "_init", PORT_B%
+      Case "s"
+        do_save% = 1
+        Exit Do
+      Case Chr$(27) ' Escape
+        Exit Do
+    End Select
+
+    Pause 25
+  Loop
+
+  ' Write current settings to .INI file.
+  If do_save% Then
+    result% = put_prop%(settings$(), "port-a", controller$(PORT_A%))
+    result% = put_prop%(settings$(), "port-b", controller$(PORT_B%))
+    result% = write_inifile%(PG_INI_FILE$, settings$())
+    If result% <> 0 Then Error "Failed to save '" + PG_INI_FILE$ "': " + Str$(result%)
+  EndIf
+End Sub
+
+' Prints text on the VGA screen at the given column and row.
+'
+' @param col%      the column, from 0.
+' @param row%      the row, from 0.
+' @param s$        the text.
+' @param inverse%  print black on white instead of white on black.
+Sub print_at(col%, row%, s$, inverse%)
+  Local x% = col% * Mm.Info(FontWidth)
+  Local y% = row% * Mm.Info(FontHeight * 1.5)
+  Local fg% = Choice(inverse%, Rgb(Black), Rgb(White))
+  Local bg% = Choice(inverse%, Rgb(White), Rgb(Black))
+  Text x%, y%, s$, LT, 1, 1, fg%, bg%
+End Sub
+
+' Prints the controller options.
+Sub print_ctrl_options()
+  Local i%, selected%
+  ' Controller A:
+  For i% = 0 To 3
+    selected% = controller$(PORT_A%) = CONTROLLER_IDS$(i%)
+    print_ctrl_option(i% + 7, Str$(i% + 1), CONTROLLER_NAMES$(i%), selected%)
+  Next
+  ' Controller B:
+  For i% = 0 To 3
+    selected% = controller$(PORT_B%) = CONTROLLER_IDS$(i%)
+    print_ctrl_option(i% + 13, Str$(i% + 5), CONTROLLER_NAMES$(i%), selected%)
+    If i% = 1 Then print_at(21, i% + 13, "(not PCB 1.4 & 1.4a)")
+  Next
+End Sub
+
+' Prints a single controller option.
+Sub print_ctrl_option(y%, key$, name$, selected%)
+  Local fg% = Choice(selected%, Rgb(Black), Rgb(White))
+  Local bg% = Choice(selected%, Rgb(White), Rgb(Black))
+  print_at(2, y%, "[" + key$ + "] " + name$, selected%)
+End Sub
+
+' Dummy port initialisation when no controller is configured.
+Sub none_init(idx%)
+End Sub
+
+' Dummy port read when no controller is configured.
+Function none_read%(idx%)
+End Function
