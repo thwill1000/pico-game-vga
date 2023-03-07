@@ -32,18 +32,25 @@ Suggested sources for components are given in the BOM, or to save a few pennies 
 
 The PicoGAME is compatible with NES/Famicom "clone" gamepads with female DB-9/DE-9 plugs as shown below:
   
-![Gamepad 1](images/gamepad1.jpg)
-![Gamepad 2](images/gamepad2.jpg)
+![Gamepad 3](images/gamepad3.jpg)
 
 Notes:
  1. Though they appear to have 4 fire-buttons these gamepads really only have 2: A & B. The other two are the "autofire/turbo" buttons and just simulate A or B being rapidly and repeatedly pressed.
  2. Make sure you get gamepads with 9-pin female DB-9/DE-9 plugs, not ones with the official NES 7-pin plug or those with USB-A connectors designed for use with modern PCs.
 
-They can be obtained from the following AliExpress vendors - **these are just examples, not affiliate links and I take no responsibility for the quality of the goods:**
+I bought mine from this AliExpress link: https://www.aliexpress.com/item/32803427153.html.
 
- - https://www.aliexpress.com/item/32919127872.html
- - https://www.aliexpress.com/item/32803427153.html
- - and many others.
+**WARNING!** There are lots of nominally NES/Famicom (and SNES) clone 9-pin gamepads on AliExpress and some of them are useless; or at least I, and several others, have received useless ones.
+
+There is certainly a batch of ones that look like this with mechanically poor D-pads that don't give clear UP and RIGHT signals:
+
+![Gamepad 1](images/gamepad1.jpg)
+
+But this almost identical (the grey buttons are the most obvious visual difference) seems to be good:
+
+<img src='images/gamepad4.jpg' width='400'>
+
+Unfortunately I've received mixed batches of both of these advertised using a picture of the first - it appears even the vendors are not paying attention ¯\\_(ツ)_/¯.
 
 ## What joysticks can I use ?
 
@@ -51,11 +58,9 @@ The PicoGAME is compatible with Atari style single-button digital joysticks with
   
 ![Atari Joystick](images/joystick.jpg)
 
-They can be obtained from the following eBay and AliExpress vendors - **these are just examples, not affiliate links and I take no responsibility for the quality of the goods:**
+I bought mine from this AliExpress link: https://www.aliexpress.com/item/1005003590552924.html, and there are other vendors selling similar items on AliExpress and eBay.
 
- - https://www.ebay.co.uk/itm/194000895590
- - https://www.aliexpress.com/item/1005003590552924.html
- - and many others.
+*Note that if my experience with gamepads is anything to go by then these are being produced by multiple cheap Chines manufacturers and there may be significant variation in quality - let the buyer beware!*
 
 ## Is there a Wiki ?
   
